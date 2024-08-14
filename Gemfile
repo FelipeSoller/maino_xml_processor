@@ -39,6 +39,8 @@ gem 'carrierwave'
 
 gem 'nokogiri'
 
+gem 'rubyzip'
+
 gem "devise"
 
 gem 'devise-tailwindcssed'

@@ -296,6 +296,7 @@ DEPENDENCIES
   rails (~> 7.0.8, >= 7.0.8.4)
   redis (~> 4.8)
   rspec-rails (~> 6.1)
+  rubyzip
   selenium-webdriver
   sidekiq
   sprockets-rails
