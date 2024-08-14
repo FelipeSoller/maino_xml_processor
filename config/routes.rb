@@ -1,7 +1,11 @@
+require 'sidekiq/web'
+
 Rails.application.routes.draw do
+  mount Sidekiq::Web => '/sidekiq' if Rails.env.development?
+  
   devise_for :users
   
-  devise_scope :user do
-    root to: 'devise/sessions#new'
-  end
+  root to: 'home#index'
+
+  resources :documents, only: [:index, :new, :create]
 end
