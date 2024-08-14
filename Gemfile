@@ -33,6 +33,10 @@ gem "jbuilder"
 # Use Redis adapter to run Action Cable in production
 gem "redis", "~> 4.8"
 
+gem 'sidekiq'
+
+gem 'carrierwave'
+
 gem "devise"
 
 gem 'devise-tailwindcssed'

@@ -1,0 +1,20 @@
+<h1>Meus Documentos</h1>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Arquivo</th>
+      <th>Data de Envio</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @documents.each do |document| %>
+      <tr>
+        <td><%= link_to document.file.identifier, document.file.url %></td>
+        <td><%= document.created_at.strftime("%d/%m/%Y %H:%M") %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<%= link_to "Enviar Novo Documento", new_document_path, class: "btn btn-primary" %>

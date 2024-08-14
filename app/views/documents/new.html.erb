@@ -1,0 +1,10 @@
+<%= form_with(model: @document, local: true) do |form| %>
+  <div class="form-group">
+    <%= form.label :file, "Upload de Documento (XML ou ZIP)" %>
+    <%= form.file_field :file, class: "form-control" %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit "Enviar Documento", class: "btn btn-primary" %>
+  </div>
+<% end %>
