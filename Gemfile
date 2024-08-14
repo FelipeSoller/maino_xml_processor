@@ -37,6 +37,8 @@ gem 'sidekiq'
 
 gem 'carrierwave'
 
+gem 'nokogiri'
+
 gem "devise"
 
 gem 'devise-tailwindcssed'
