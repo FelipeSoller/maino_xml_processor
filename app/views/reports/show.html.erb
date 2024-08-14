@@ -1,0 +1,101 @@
+<h1>Detalhes do Documento Fiscal</h1>
+
+<h3>Informações do Documento</h3>
+<table class="table">
+  <tr>
+    <th>Série:</th>
+    <td><%= @document_detail.serie %></td>
+  </tr>
+  <tr>
+    <th>Número da NF:</th>
+    <td><%= @document_detail.nnf %></td>
+  </tr>
+  <tr>
+    <th>Data de Emissão:</th>
+    <td><%= @document_detail.dhemi.strftime("%d/%m/%Y %H:%M") %></td>
+  </tr>
+  <tr>
+    <th>Valor do Produto:</th>
+    <td><%= number_to_currency(@document_detail.vprod, unit: "R$") %></td>
+  </tr>
+  <tr>
+    <th>Valor do ICMS:</th>
+    <td><%= number_to_currency(@document_detail.vicms, unit: "R$") %></td>
+  </tr>
+  <tr>
+    <th>Valor do IPI:</th>
+    <td><%= number_to_currency(@document_detail.vipi, unit: "R$") %></td>
+  </tr>
+  <tr>
+    <th>Valor do PIS:</th>
+    <td><%= number_to_currency(@document_detail.vpis, unit: "R$") %></td>
+  </tr>
+  <tr>
+    <th>Valor do COFINS:</th>
+    <td><%= number_to_currency(@document_detail.vcofins, unit: "R$") %></td>
+  </tr>
+  <tr>
+    <th>Valor Total da NF:</th>
+    <td><%= number_to_currency(@document_detail.vnf, unit: "R$") %></td>
+  </tr>
+</table>
+
+<h3>Informações do Emitente</h3>
+<table class="table">
+  <tr>
+    <th>Nome:</th>
+    <td><%= @document_detail.emit.xnome %></td>
+  </tr>
+  <tr>
+    <th>CNPJ:</th>
+    <td><%= @document_detail.emit.cnpj %></td>
+  </tr>
+  <tr>
+    <th>Endereço:</th>
+    <td><%= @document_detail.emit.xlgr %>, <%= @document_detail.emit.nro %>, <%= @document_detail.emit.xbairro %>, <%= @document_detail.emit.xmun %>, <%= @document_detail.emit.uf %> - CEP: <%= @document_detail.emit.cep %></td>
+  </tr>
+</table>
+
+<h3>Informações do Destinatário</h3>
+<table class="table">
+  <tr>
+    <th>Nome:</th>
+    <td><%= @document_detail.dest.xnome %></td>
+  </tr>
+  <tr>
+    <th>CNPJ:</th>
+    <td><%= @document_detail.dest.cnpj %></td>
+  </tr>
+  <tr>
+    <th>Endereço:</th>
+    <td><%= @document_detail.dest.xlgr %>, <%= @document_detail.dest.nro %>, <%= @document_detail.dest.xbairro %>, <%= @document_detail.dest.xmun %>, <%= @document_detail.dest.uf %> - CEP: <%= @document_detail.dest.cep %></td>
+  </tr>
+</table>
+
+<h3>Detalhes dos Produtos</h3>
+<table class="table">
+  <thead>
+    <tr>
+      <th>Produto</th>
+      <th>NCM</th>
+      <th>CFOP</th>
+      <th>Unidade</th>
+      <th>Quantidade</th>
+      <th>Valor Unitário</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @document_detail.dets.each do |det| %>
+      <tr>
+        <td><%= det.xprod %></td>
+        <td><%= det.ncm %></td>
+        <td><%= det.cfop %></td>
+        <td><%= det.ucom %></td>
+        <td><%= det.qcom %></td>
+        <td><%= number_to_currency(det.vuncom, unit: "R$") %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<%= link_to 'Voltar', reports_path, class: "btn btn-secondary" %>

@@ -1,0 +1,28 @@
+<h1>Relatórios de Documentos Fiscais</h1>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Série</th>
+      <th>NF</th>
+      <th>Data de Emissão</th>
+      <th>Emitente</th>
+      <th>Destinatário</th>
+      <th>Valor Total</th>
+      <th>Ações</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @document_details.each do |detail| %>
+      <tr>
+        <td><%= detail.serie %></td>
+        <td><%= detail.nnf %></td>
+        <td><%= detail.dhemi.strftime("%d/%m/%Y %H:%M") %></td>
+        <td><%= detail.emit.xnome %></td>
+        <td><%= detail.dest.xnome %></td>
+        <td><%= number_to_currency(detail.vnf, unit: "R$") %></td>
+        <td><%= link_to 'Ver Detalhes', report_path(detail), class: "btn btn-primary" %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
