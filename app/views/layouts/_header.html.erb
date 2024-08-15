@@ -1,0 +1,14 @@
+<div class="bg-gray-100 shadow-md fixed top-0 left-0 w-full z-10">
+  <div class="flex justify-between items-center p-4 max-w-7xl mx-auto">
+    <div>
+      <img src="https://i0.wp.com/maino.com.br/wp-content/uploads/2021/11/Logo-Oficial.webp?resize=1024%2C440&ssl=1" alt="Logo Maino" class="w-32">
+    </div>
+    
+    <div class="flex space-x-6">
+      <%= link_to 'Processar Documentos', new_document_path, class: 'text-lg text-[#073b4c] font-bold hover:text-[#004385]' %>
+      <%= link_to 'Documentos Processados', documents_path, class: 'text-lg text-[#073b4c] font-bold hover:text-[#004385]' %>
+      <%= link_to 'Relatórios', reports_path, class: 'text-lg text-[#073b4c] font-bold hover:text-[#004385]' %>
+      <%= button_to 'Log Out', destroy_user_session_path, method: :delete, class: 'text-lg text-red-600 font-bold hover:text-red-800' %>
+    </div>
+  </div>
+</div>

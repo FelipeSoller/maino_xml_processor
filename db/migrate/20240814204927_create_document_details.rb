@@ -11,8 +11,6 @@ class CreateDocumentDetails < ActiveRecord::Migration[7.0]
       t.decimal :vprod
       t.decimal :vnf
       t.references :document, null: false, foreign_key: true
-      t.references :emit, null: false, foreign_key: true
-      t.references :dest, null: false, foreign_key: true
 
       t.timestamps
     end

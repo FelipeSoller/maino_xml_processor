@@ -1,3 +1,3 @@
 class Emit < ApplicationRecord
-  has_many :document_details, dependent: :destroy
+  belongs_to :document_detail
 end

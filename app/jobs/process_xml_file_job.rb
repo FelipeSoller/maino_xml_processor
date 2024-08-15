@@ -6,7 +6,6 @@ class ProcessXmlFileJob < ApplicationJob
   def perform(document_id)
     document = Document.find(document_id)
     
-    # Ler o conteúdo do arquivo ZIP ou XML
     if document.file.file.extension.downcase == 'zip'
       process_zip_file(document)
     else
@@ -17,7 +16,6 @@ class ProcessXmlFileJob < ApplicationJob
   private
 
   def process_zip_file(document)
-    # Extrair arquivos do ZIP
     Zip::File.open(document.file.path) do |zip_file|
       zip_file.each do |entry|
         next unless entry.file? && entry.name.downcase.end_with?('.xml')
@@ -38,7 +36,6 @@ class ProcessXmlFileJob < ApplicationJob
   def process_parsed_xml(parsed_xml, document)
     namespaces = { 'nfe' => 'http://www.portalfiscal.inf.br/nfe' }
 
-    # Verificar se os elementos obrigatórios existem
     emit_element = parsed_xml.at_xpath("//nfe:emit", namespaces)
     dest_element = parsed_xml.at_xpath("//nfe:dest", namespaces)
     ide_element = parsed_xml.at_xpath("//nfe:ide", namespaces)
@@ -48,8 +45,22 @@ class ProcessXmlFileJob < ApplicationJob
       return
     end
 
-    # Processar Emit
-    emit = Emit.create!(
+    document_detail = DocumentDetail.create!(
+      document: document,
+      user: document.user,
+      serie: ide_element.at_xpath("nfe:serie", namespaces)&.text,
+      nnf: ide_element.at_xpath("nfe:nNF", namespaces)&.text,
+      dhemi: ide_element.at_xpath("nfe:dhEmi", namespaces)&.text,
+      vipi: parsed_xml.at_xpath("//nfe:ICMSTot/nfe:vIPI", namespaces)&.text.to_d,
+      vpis: parsed_xml.at_xpath("//nfe:ICMSTot/nfe:vPIS", namespaces)&.text.to_d,
+      vcofins: parsed_xml.at_xpath("//nfe:ICMSTot/nfe:vCOFINS", namespaces)&.text.to_d,
+      vicms: parsed_xml.at_xpath("//nfe:ICMSTot/nfe:vICMS", namespaces)&.text.to_d,
+      vprod: parsed_xml.at_xpath("//nfe:ICMSTot/nfe:vProd", namespaces)&.text.to_d,
+      vnf: parsed_xml.at_xpath("//nfe:ICMSTot/nfe:vNF", namespaces)&.text.to_d,
+    )
+
+    Emit.create!(
+      document_detail: document_detail,
       cnpj: emit_element.at_xpath("nfe:CNPJ", namespaces)&.text,
       xnome: emit_element.at_xpath("nfe:xNome", namespaces)&.text,
       xfant: emit_element.at_xpath("nfe:xFant", namespaces)&.text,
@@ -68,8 +79,8 @@ class ProcessXmlFileJob < ApplicationJob
       crt: emit_element.at_xpath("nfe:CRT", namespaces)&.text
     )
 
-    # Processar Dest
-    dest = Dest.create!(
+    Dest.create!(
+      document_detail: document_detail,
       cnpj: dest_element.at_xpath("nfe:CNPJ", namespaces)&.text,
       xnome: dest_element.at_xpath("nfe:xNome", namespaces)&.text,
       xlgr: dest_element.at_xpath("nfe:enderDest/nfe:xLgr", namespaces)&.text,
@@ -84,23 +95,6 @@ class ProcessXmlFileJob < ApplicationJob
       indiedest: dest_element.at_xpath("nfe:indIEDest", namespaces)&.text
     )
 
-    # Processar DocumentDetail
-    document_detail = DocumentDetail.create!(
-      document: document,
-      serie: ide_element.at_xpath("nfe:serie", namespaces)&.text,
-      nnf: ide_element.at_xpath("nfe:nNF", namespaces)&.text,
-      dhemi: ide_element.at_xpath("nfe:dhEmi", namespaces)&.text,
-      vipi: parsed_xml.at_xpath("//nfe:ICMSTot/nfe:vIPI", namespaces)&.text.to_d,
-      vpis: parsed_xml.at_xpath("//nfe:ICMSTot/nfe:vPIS", namespaces)&.text.to_d,
-      vcofins: parsed_xml.at_xpath("//nfe:ICMSTot/nfe:vCOFINS", namespaces)&.text.to_d,
-      vicms: parsed_xml.at_xpath("//nfe:ICMSTot/nfe:vICMS", namespaces)&.text.to_d,
-      vprod: parsed_xml.at_xpath("//nfe:ICMSTot/nfe:vProd", namespaces)&.text.to_d,
-      vnf: parsed_xml.at_xpath("//nfe:ICMSTot/nfe:vNF", namespaces)&.text.to_d,
-      emit: emit,
-      dest: dest
-    )
-
-    # Processar Detalhes dos Produtos (det)
     parsed_xml.xpath("//nfe:det", namespaces).each do |det_element|
       Det.create!(
         document_detail: document_detail,

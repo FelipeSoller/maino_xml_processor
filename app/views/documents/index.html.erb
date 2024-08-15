@@ -1,20 +1,39 @@
-<h1>Meus Documentos</h1>
+<div class="flex flex-col items-center mt-10">
+  <!-- Título e Botão ao lado -->
+  <div class="flex items-center justify-between w-full max-w-7xl mb-6">
+    <h1 class="text-4xl font-bold text-[#073b4c]">Documentos Processados</h1>
+    <%= link_to "Processar Novo Documento", new_document_path, class: "bg-[#073b4c] hover:bg-[#004385] text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" %>
+  </div>
 
-<table class="table">
-  <thead>
-    <tr>
-      <th>Arquivo</th>
-      <th>Data de Envio</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @documents.each do |document| %>
-      <tr>
-        <td><%= link_to document.file.identifier, document.file.url %></td>
-        <td><%= document.created_at.strftime("%d/%m/%Y %H:%M") %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
-
-<%= link_to "Enviar Novo Documento", new_document_path, class: "btn btn-primary" %>
+  <!-- Tabela centralizada -->
+  <div class="w-full max-w-7xl">
+    <div class="overflow-x-auto">
+      <table class="min-w-full bg-white rounded shadow-md">
+        <thead class="bg-[#073b4c] text-white">
+          <tr>
+            <th class="py-3 px-6 text-left">Arquivo</th>
+            <th class="py-3 px-6 text-left">Data de Envio</th>
+            <th class="py-3 px-6 text-left">Ações</th>
+          </tr>
+        </thead>
+        <tbody class="text-gray-700">
+          <% @documents.each do |document| %>
+            <tr class="border-b">
+              <td class="py-3 px-6">
+                <%= link_to document.file.identifier, document.file.url, class: "text-blue-500 hover:text-blue-700" %>
+              </td>
+              <td class="py-3 px-6">
+                <%= document.created_at.strftime("%d/%m/%Y %H:%M") %>
+              </td>
+              <td class="py-3 px-6">
+                <div class="flex space-x-2">
+                  <%= link_to "Excluir", document_path(document), data: { turbo_confirm: 'Tem certeza que deseja excluir este documento?', turbo_method: :delete }, class: "bg-red-600 hover:bg-red-800 text-white font-bold py-1 px-3 rounded focus:outline-none focus:shadow-outline" %>
+                </div>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

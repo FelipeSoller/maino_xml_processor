@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_08_14_160317) do
+ActiveRecord::Schema[7.0].define(version: 2024_08_15_005331) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -27,8 +27,10 @@ ActiveRecord::Schema[7.0].define(version: 2024_08_14_160317) do
     t.string "cpais"
     t.string "xpais"
     t.string "indiedest"
+    t.bigint "document_detail_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["document_detail_id"], name: "index_dests_on_document_detail_id"
   end
 
   create_table "dets", force: :cascade do |t|
@@ -55,13 +57,11 @@ ActiveRecord::Schema[7.0].define(version: 2024_08_14_160317) do
     t.decimal "vprod"
     t.decimal "vnf"
     t.bigint "document_id", null: false
-    t.bigint "emit_id", null: false
-    t.bigint "dest_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["dest_id"], name: "index_document_details_on_dest_id"
+    t.bigint "user_id", null: false
     t.index ["document_id"], name: "index_document_details_on_document_id"
-    t.index ["emit_id"], name: "index_document_details_on_emit_id"
+    t.index ["user_id"], name: "index_document_details_on_user_id"
   end
 
   create_table "documents", force: :cascade do |t|
@@ -89,8 +89,10 @@ ActiveRecord::Schema[7.0].define(version: 2024_08_14_160317) do
     t.string "fone"
     t.string "ie"
     t.string "crt"
+    t.bigint "document_detail_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["document_detail_id"], name: "index_emits_on_document_detail_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -105,9 +107,10 @@ ActiveRecord::Schema[7.0].define(version: 2024_08_14_160317) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "dests", "document_details"
   add_foreign_key "dets", "document_details"
-  add_foreign_key "document_details", "dests"
   add_foreign_key "document_details", "documents"
-  add_foreign_key "document_details", "emits"
+  add_foreign_key "document_details", "users"
   add_foreign_key "documents", "users"
+  add_foreign_key "emits", "document_details"
 end
