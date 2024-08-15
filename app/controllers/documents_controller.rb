@@ -11,29 +11,40 @@ class DocumentsController < ApplicationController
   end
 
   def create
-    uploaded_files = params[:document][:files].reject(&:blank?) 
+    uploaded_files = params[:document][:files].reject(&:blank?)
     errors = []
-
+  
     if uploaded_files.present?
       uploaded_files.each do |uploaded_file|
+        unless ['zip', 'xml'].include?(uploaded_file.original_filename.split('.').last.downcase)
+          errors << "Arquivo #{uploaded_file.original_filename} não é suportado. Apenas arquivos ZIP e XML são permitidos."
+          next
+        end
+  
         document = current_user.documents.build(file: uploaded_file)
-
+  
         if document.save
-          ProcessXmlFileJob.perform_later(document.id) 
+          ProcessXmlFileJob.perform_later(document.id)
         else
           errors << "Erro ao enviar o documento: #{uploaded_file.original_filename}"
         end
       end
-
+  
       if errors.empty?
-        redirect_to documents_path, notice: 'Todos os documentos foram processados com sucesso.'
+        respond_to do |format|
+          format.turbo_stream { redirect_to documents_path, notice: 'Todos os documentos foram processados com sucesso.' }
+        end
       else
-        flash[:alert] = errors.join(', ')
-        render :new
+        flash.now[:alert] = errors.join(', ')
+        respond_to do |format|
+          format.turbo_stream { render turbo_stream: turbo_stream.replace("form_errors", partial: "documents/form_errors") }
+        end
       end
     else
-      flash[:alert] = 'Nenhum documento válido foi selecionado.'
-      render :new
+      flash.now[:alert] = 'Nenhum documento válido foi selecionado.'
+      respond_to do |format|
+        format.turbo_stream { render turbo_stream: turbo_stream.replace("form_errors", partial: "documents/form_errors") }
+      end
     end
   end
 
@@ -52,6 +63,14 @@ class DocumentsController < ApplicationController
   rescue ActiveRecord::RecordNotFound
     flash[:alert] = 'Documento não encontrado.'
     redirect_to documents_path
+  end
+
+  def valid_file_type
+    if file.present?
+      unless ['zip', 'xml'].include?(file.file.extension.downcase)
+        errors.add(:file, "tipo de arquivo não é suportado. Apenas ZIP e XML são permitidos.")
+      end
+    end
   end
 
   def document_params

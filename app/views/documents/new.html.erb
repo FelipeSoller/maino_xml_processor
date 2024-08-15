@@ -1,3 +1,11 @@
+<div id="form_errors">
+  <% if flash[:alert].present? %>
+    <div class="alert alert-danger">
+      <%= flash[:alert] %>
+    </div>
+  <% end %>
+</div>
+
 <%= form_with(model: @document, local: true, html: { class: "bg-white mb-4 px-8 pt-6 pb-8 rounded shadow-md max-w-lg mx-auto mt-10" }) do |form| %>
   <div class="mb-4">
     <%= form.label :file, "Upload de Documentos (XML ou ZIP)", class: "block text-gray-700 text-sm font-bold mb-2" %>
