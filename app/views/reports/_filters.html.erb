@@ -1,0 +1,53 @@
+<div class="bg-white rounded shadow-md p-6 mb-6">
+  <%= form_with(url: reports_path, method: :get, local: true, class: 'grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3') do %>
+    <div class="flex flex-col">
+      <%= label_tag :start_date, "Data de Emissão Inicial", class: "text-gray-700 font-semibold mb-2" %>
+      <%= date_field_tag :start_date, params[:start_date], class: "border border-gray-300 rounded py-2 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#073b4c]" %>
+    </div>
+
+    <div class="flex flex-col">
+      <%= label_tag :end_date, "Data de Emissão Final", class: "text-gray-700 font-semibold mb-2" %>
+      <%= date_field_tag :end_date, params[:end_date], class: "border border-gray-300 rounded py-2 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#073b4c]" %>
+    </div>
+
+    <div class="flex flex-col">
+      <%= label_tag :emit_name, "Nome do Emitente", class: "text-gray-700 font-semibold mb-2" %>
+      <%= text_field_tag :emit_name, params[:emit_name], class: "border border-gray-300 rounded py-2 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#073b4c]" %>
+    </div>
+
+    <div class="flex flex-col">
+      <%= label_tag :dest_name, "Nome do Destinatário", class: "text-gray-700 font-semibold mb-2" %>
+      <%= text_field_tag :dest_name, params[:dest_name], class: "border border-gray-300 rounded py-2 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#073b4c]" %>
+    </div>
+
+    <div class="flex flex-col">
+      <%= label_tag :min_vprod, "Valor Mínimo do Produto", class: "text-gray-700 font-semibold mb-2" %>
+      <%= number_field_tag :min_vprod, params[:min_vprod], class: "border border-gray-300 rounded py-2 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#073b4c]" %>
+    </div>
+
+    <div class="flex flex-col">
+      <%= label_tag :max_vprod, "Valor Máximo do Produto", class: "text-gray-700 font-semibold mb-2" %>
+      <%= number_field_tag :max_vprod, params[:max_vprod], class: "border border-gray-300 rounded py-2 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#073b4c]" %>
+    </div>
+
+    <div class="flex flex-col">
+      <%= label_tag :xprod, "Produto", class: "text-gray-700 font-semibold mb-2" %>
+      <%= text_field_tag :xprod, params[:xprod], class: "border border-gray-300 rounded py-2 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#073b4c]" %>
+    </div>
+
+    <div class="flex flex-col">
+      <%= label_tag :ncm, "NCM", class: "text-gray-700 font-semibold mb-2" %>
+      <%= text_field_tag :ncm, params[:ncm], class: "border border-gray-300 rounded py-2 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#073b4c]" %>
+    </div>
+
+    <div class="flex flex-col">
+      <%= label_tag :cfop, "CFOP", class: "text-gray-700 font-semibold mb-2" %>
+      <%= text_field_tag :cfop, params[:cfop], class: "border border-gray-300 rounded py-2 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#073b4c]" %>
+    </div>
+
+    <div class="flex items-end space-x-4">
+      <%= submit_tag "Filtrar", class: "bg-[#073b4c] hover:bg-[#004385] text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" %>
+      <%= link_to "Limpar Filtros", reports_path, class: "bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" %>
+    </div>
+  <% end %>
+</div>
