@@ -2,33 +2,43 @@
 
 <%= render 'filters' %>
 
-<div class="overflow-x-auto">
-  <table class="min-w-full bg-white rounded shadow-md">
-    <thead class="bg-[#073b4c] text-white">
-      <tr>
-        <th class="py-3 px-6 text-left">Série</th>
-        <th class="py-3 px-6 text-left">NF</th>
-        <th class="py-3 px-6 text-left">Data de Emissão</th>
-        <th class="py-3 px-6 text-left">Emitente</th>
-        <th class="py-3 px-6 text-left">Destinatário</th>
-        <th class="py-3 px-6 text-left">Valor Total</th>
-        <th class="py-3 px-6 text-left">Ações</th>
-      </tr>
-    </thead>
-    <tbody class="text-gray-700">
-      <% @document_details.each do |detail| %>
-        <tr class="border-b">
-          <td class="py-3 px-6"><%= detail.serie %></td>
-          <td class="py-3 px-6"><%= detail.nnf %></td>
-          <td class="py-3 px-6"><%= detail.dhemi.strftime("%d/%m/%Y %H:%M") %></td>
-          <td class="py-3 px-6"><%= detail.emit.xnome %></td>
-          <td class="py-3 px-6"><%= detail.dest.xnome %></td>
-          <td class="py-3 px-6"><%= number_to_currency(detail.vnf, unit: "R$") %></td>
-          <td class="py-3 px-6">
-            <%= link_to 'Ver Detalhes', report_path(detail), class: "bg-[#073b4c] hover:bg-[#004385] text-white font-bold py-1 px-3 rounded focus:outline-none focus:shadow-outline" %>
-          </td>
+<%= form_with url: export_reports_path, method: :post, data: { turbo: false }, local: true do %>
+  <div class="overflow-x-auto">
+    <table class="min-w-full bg-white rounded shadow-md">
+      <thead class="bg-[#073b4c] text-white">
+        <tr>
+          <th class="py-3 px-6 text-left"></th>
+          <th class="py-3 px-6 text-left">Série</th>
+          <th class="py-3 px-6 text-left">NF</th>
+          <th class="py-3 px-6 text-left">Data de Emissão</th>
+          <th class="py-3 px-6 text-left">Emitente</th>
+          <th class="py-3 px-6 text-left">Destinatário</th>
+          <th class="py-3 px-6 text-left">Valor Total</th>
+          <th class="py-3 px-6 text-left">Ações</th>
         </tr>
-      <% end %>
-    </tbody>
-  </table>
-</div>
+      </thead>
+      <tbody class="text-gray-700">
+        <% @document_details.each do |detail| %>
+          <tr class="border-b">
+            <td class="py-3 px-6">
+              <%= check_box_tag "document_detail_ids[]", detail.id, false, class: "document-checkbox" %>
+            </td>
+            <td class="py-3 px-6"><%= detail.serie %></td>
+            <td class="py-3 px-6"><%= detail.nnf %></td>
+            <td class="py-3 px-6"><%= detail.dhemi.strftime("%d/%m/%Y %H:%M") %></td>
+            <td class="py-3 px-6"><%= detail.emit.xnome %></td>
+            <td class="py-3 px-6"><%= detail.dest.xnome %></td>
+            <td class="py-3 px-6"><%= number_to_currency(detail.vnf, unit: "R$") %></td>
+            <td class="py-3 px-6">
+              <%= link_to 'Ver Detalhes', report_path(detail), class: "bg-[#073b4c] hover:bg-[#004385] text-white font-bold py-1 px-3 rounded focus:outline-none focus:shadow-outline" %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+
+  <%= submit_tag "Exportar Selecionados para Excel", class: "bg-[#073b4c] hover:bg-[#004385] text-white font-bold py-2 px-4 rounded mt-4" %>
+<% end %>
+
+<%= paginate @document_details %>

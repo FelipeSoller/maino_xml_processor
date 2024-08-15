@@ -90,6 +90,11 @@ GEM
       image_processing (~> 1.1)
       marcel (~> 1.0.0)
       ssrf_filter (~> 1.0)
+    caxlsx (4.1.0)
+      htmlentities (~> 4.3, >= 4.3.4)
+      marcel (~> 1.0)
+      nokogiri (~> 1.10, >= 1.10.4)
+      rubyzip (>= 1.3.0, < 3)
     concurrent-ruby (1.3.4)
     connection_pool (2.4.1)
     crass (1.0.6)
@@ -110,6 +115,7 @@ GEM
     ffi (1.17.0-x86_64-linux-gnu)
     globalid (1.2.1)
       activesupport (>= 6.1)
+    htmlentities (4.3.4)
     i18n (1.14.5)
       concurrent-ruby (~> 1.0)
     image_processing (1.13.0)
@@ -279,6 +285,7 @@ DEPENDENCIES
   bootsnap
   capybara
   carrierwave
+  caxlsx
   debug
   devise
   devise-tailwindcssed
