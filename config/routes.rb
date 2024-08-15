@@ -8,4 +8,5 @@ Rails.application.routes.draw do
   root to: 'home#index'
 
   resources :documents, only: [:index, :new, :create, :destroy]
+  resources :reports, only: [:index, :show]
 end

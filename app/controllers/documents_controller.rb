@@ -18,8 +18,19 @@ class DocumentsController < ApplicationController
       uploaded_files.each do |uploaded_file|
         document = current_user.documents.build(file: uploaded_file)
 
+        if document.save
+          ProcessXmlFileJob.perform_later(document.id) 
+        else
+          errors << "Erro ao enviar o documento: #{uploaded_file.original_filename}"
+        end
       end
 
+      if errors.empty?
+        redirect_to documents_path, notice: 'Todos os documentos foram processados com sucesso.'
+      else
+        flash[:alert] = errors.join(', ')
+        render :new
+      end
     else
       flash[:alert] = 'Nenhum documento válido foi selecionado.'
       render :new

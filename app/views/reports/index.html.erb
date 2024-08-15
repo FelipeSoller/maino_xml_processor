@@ -1,0 +1,32 @@
+<h1 class="text-4xl font-bold text-[#073b4c] mb-6">Relatórios de Documentos Fiscais</h1>
+
+<div class="overflow-x-auto">
+  <table class="min-w-full bg-white rounded shadow-md">
+    <thead class="bg-[#073b4c] text-white">
+      <tr>
+        <th class="py-3 px-6 text-left">Série</th>
+        <th class="py-3 px-6 text-left">NF</th>
+        <th class="py-3 px-6 text-left">Data de Emissão</th>
+        <th class="py-3 px-6 text-left">Emitente</th>
+        <th class="py-3 px-6 text-left">Destinatário</th>
+        <th class="py-3 px-6 text-left">Valor Total</th>
+        <th class="py-3 px-6 text-left">Ações</th>
+      </tr>
+    </thead>
+    <tbody class="text-gray-700">
+      <% @document_details.each do |detail| %>
+        <tr class="border-b">
+          <td class="py-3 px-6"><%= detail.serie %></td>
+          <td class="py-3 px-6"><%= detail.nnf %></td>
+          <td class="py-3 px-6"><%= detail.dhemi.strftime("%d/%m/%Y %H:%M") %></td>
+          <td class="py-3 px-6"><%= detail.emit.xnome %></td>
+          <td class="py-3 px-6"><%= detail.dest.xnome %></td>
+          <td class="py-3 px-6"><%= number_to_currency(detail.vnf, unit: "R$") %></td>
+          <td class="py-3 px-6">
+            <%= link_to 'Ver Detalhes', report_path(detail), class: "bg-[#073b4c] hover:bg-[#004385] text-white font-bold py-1 px-3 rounded focus:outline-none focus:shadow-outline" %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
