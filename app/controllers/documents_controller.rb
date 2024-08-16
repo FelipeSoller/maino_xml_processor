@@ -13,35 +13,46 @@ class DocumentsController < ApplicationController
   def create
     uploaded_files = params[:document][:files].reject(&:blank?)
     errors = []
+    invalid_files = []
   
-    if uploaded_files.present?
-      uploaded_files.each do |uploaded_file|
-        unless ['zip', 'xml'].include?(uploaded_file.original_filename.split('.').last.downcase)
-          errors << "Arquivo #{uploaded_file.original_filename} não é suportado. Apenas arquivos ZIP e XML são permitidos."
-          next
-        end
-  
-        document = current_user.documents.build(file: uploaded_file)
-  
-        if document.save
-          ProcessXmlFileJob.perform_later(document.id)
-        else
-          errors << "Erro ao enviar o documento: #{uploaded_file.original_filename}"
-        end
+    uploaded_files.each do |uploaded_file|
+      unless ['zip', 'xml'].include?(uploaded_file.original_filename.split('.').last.downcase)
+        invalid_files << uploaded_file.original_filename
       end
+    end
   
-      if errors.empty?
-        respond_to do |format|
-          format.turbo_stream { redirect_to documents_path, notice: 'Todos os documentos foram processados com sucesso.' }
-        end
+    if invalid_files.any?
+      flash.now[:alert] = "Os seguintes arquivos não são suportados: #{invalid_files.join(', ')}. Apenas ZIP e XML são permitidos."
+      respond_to do |format|
+        format.turbo_stream { render turbo_stream: turbo_stream.replace("form_errors", partial: "documents/form_errors") }
+      end
+      return
+    end
+  
+    if uploaded_files.empty?
+      flash.now[:alert] = 'Nenhum documento válido foi selecionado.'
+      respond_to do |format|
+        format.turbo_stream { render turbo_stream: turbo_stream.replace("form_errors", partial: "documents/form_errors") }
+      end
+      return
+    end
+  
+    uploaded_files.each do |uploaded_file|
+      document = current_user.documents.build(file: uploaded_file)
+  
+      if document.save
+        ProcessXmlFileJob.perform_later(document.id)
       else
-        flash.now[:alert] = errors.join(', ')
-        respond_to do |format|
-          format.turbo_stream { render turbo_stream: turbo_stream.replace("form_errors", partial: "documents/form_errors") }
-        end
+        errors << "Erro ao enviar o documento: #{uploaded_file.original_filename}"
+      end
+    end
+  
+    if errors.empty?
+      respond_to do |format|
+        format.turbo_stream { redirect_to documents_path, notice: 'Todos os documentos foram enviados e processados com sucesso.' }
       end
     else
-      flash.now[:alert] = 'Nenhum documento válido foi selecionado.'
+      flash.now[:alert] = errors.join(', ')
       respond_to do |format|
         format.turbo_stream { render turbo_stream: turbo_stream.replace("form_errors", partial: "documents/form_errors") }
       end
