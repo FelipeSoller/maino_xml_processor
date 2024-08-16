@@ -2,7 +2,7 @@
 
 <%= render 'filters' %>
 
-<%= form_with url: export_reports_path, method: :post, data: { turbo: false }, local: true do %>
+<%= form_with url: export_documents_reports_path, method: :post, data: { turbo: false }, local: true do %>
   <div class="overflow-x-auto">
     <table class="min-w-full bg-white rounded shadow-md">
       <thead class="bg-[#073b4c] text-white">
@@ -38,7 +38,7 @@
     </table>
   </div>
 
-  <%= submit_tag "Exportar Selecionados para Excel", class: "bg-[#073b4c] hover:bg-[#004385] text-white font-bold py-2 px-4 rounded mt-4" %>
+  <%= submit_tag "Exportar Documentos Selecionados em XLS", class: "bg-[#073b4c] hover:bg-[#004385] text-white font-bold py-2 px-4 rounded mt-4" %>
 <% end %>
 
 <%= paginate @document_details %>

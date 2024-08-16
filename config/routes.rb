@@ -9,12 +9,8 @@ Rails.application.routes.draw do
 
   resources :documents, only: [:index, :new, :create, :destroy]
   resources :reports, only: [:index, :show] do
-    member do
-      get :download
-    end
-    
     collection do
-      post :export
+      post :export_documents
     end
   end
 end
