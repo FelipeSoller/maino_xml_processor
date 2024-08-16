@@ -1,7 +1,7 @@
 <div class="bg-gray-100 shadow-md fixed top-0 left-0 w-full z-10">
   <div class="flex justify-between items-center p-4 max-w-7xl mx-auto">
     <div>
-       <%= link_to root_path do %>
+      <%= link_to root_path do %>
         <img src="https://i0.wp.com/maino.com.br/wp-content/uploads/2021/11/Logo-Oficial.webp?resize=1024%2C440&ssl=1" alt="Logo Maino" class="w-32">
       <% end %>
     </div>
@@ -9,15 +9,15 @@
     <div>
       <% if user_signed_in? %>
         <div class="flex space-x-6">
-          <%= link_to 'Processar Documentos', new_document_path, class: 'text-lg text-[#073b4c] font-bold hover:text-[#004385]' %>
-          <%= link_to 'Documentos Processados', documents_path, class: 'text-lg text-[#073b4c] font-bold hover:text-[#004385]' %>
-          <%= link_to 'Relatórios', reports_path, class: 'text-lg text-[#073b4c] font-bold hover:text-[#004385]' %>
-          <%= button_to 'Log Out', destroy_user_session_path, method: :delete, class: 'text-lg text-red-600 font-bold hover:text-red-800' %>
+          <%= link_to t('views.header.process_documents'), new_document_path, class: 'text-lg text-[#073b4c] font-bold hover:text-[#004385]' %>
+          <%= link_to t('views.header.processed_documents'), documents_path, class: 'text-lg text-[#073b4c] font-bold hover:text-[#004385]' %>
+          <%= link_to t('views.header.reports'), reports_path, class: 'text-lg text-[#073b4c] font-bold hover:text-[#004385]' %>
+          <%= button_to t('views.header.logout'), destroy_user_session_path, method: :delete, class: 'text-lg text-red-600 font-bold hover:text-red-800' %>
         </div>
       <% else %>
         <div class="flex space-x-6">
-          <%= link_to 'Login', new_user_session_path, class: 'text-lg text-[#073b4c] font-bold hover:text-[#004385]' %>
-          <%= link_to 'Cadastrar', new_user_registration_path, class: 'text-lg text-[#073b4c] font-bold hover:text-[#004385]' %>
+          <%= link_to t('views.header.login'), new_user_session_path, class: 'text-lg text-[#073b4c] font-bold hover:text-[#004385]' %>
+          <%= link_to t('views.header.sign_up'), new_user_registration_path, class: 'text-lg text-[#073b4c] font-bold hover:text-[#004385]' %>
         </div>
       <% end %>
     </div>

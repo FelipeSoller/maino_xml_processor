@@ -1,4 +1,3 @@
-# app/services/report_export_service.rb
 require 'zip'
 
 class ReportExportService
@@ -8,7 +7,6 @@ class ReportExportService
     @document_details = document_details
   end
 
-  # Método para gerar o arquivo XLS para um único documento
   def generate_xls(detail)
     p = Axlsx::Package.new
     wb = p.workbook
@@ -37,7 +35,6 @@ class ReportExportService
     p.to_stream.read
   end
 
-  # Método para gerar um arquivo ZIP contendo vários arquivos XLS
   def generate_zip
     zip_data = Zip::OutputStream.write_buffer do |zip|
       @document_details.each do |detail|

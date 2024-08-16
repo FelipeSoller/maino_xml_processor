@@ -19,7 +19,7 @@ class ReportsController < ApplicationController
     document_details = selected_document_details
 
     if document_details.empty?
-      redirect_to reports_path, alert: "Nenhum documento encontrado para exportação."
+      redirect_to reports_path, alert: t('controllers.reports.alerts.no_documents_selected')
       return
     end
 
@@ -27,11 +27,11 @@ class ReportsController < ApplicationController
 
     if document_details.count == 1
       xls_data = report_service.generate_xls(document_details.first)
-      filename = generate_filename("documento_detalhado_#{document_details.first.id}", "xlsx")
+      filename = generate_filename(t('controllers.reports.filenames.single_document'), "xlsx")
       send_data xls_data, filename: filename, type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", disposition: 'attachment'
     else
       zip_data = report_service.generate_zip
-      filename = generate_filename("relatorios_exportados", "zip")
+      filename = generate_filename(t('controllers.reports.filenames.multiple_documents'), "zip")
       send_data zip_data, filename: filename, type: "application/zip", disposition: 'attachment'
     end
   end
@@ -41,7 +41,7 @@ class ReportsController < ApplicationController
   def set_document_detail
     @document_detail = current_user.document_details.find(params[:id])
   rescue ActiveRecord::RecordNotFound
-    flash[:alert] = 'Detalhe do documento não encontrado.'
+    flash[:alert] = t('controllers.reports.alerts.document_not_found')
     redirect_to reports_path
   end
 

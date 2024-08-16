@@ -1,0 +1,45 @@
+pt:
+  views:
+    home:
+      index:
+        summary_title: "Resumo"
+        paragraph_1: "Esta é uma aplicação robusta e eficiente que oferece uma solução completa para o gerenciamento e processamento de documentos XML fiscais. Com foco em segurança e praticidade, nossa aplicação inicia com um sistema de autenticação de usuário altamente seguro, utilizando a gem Devise, garantindo que apenas usuários autorizados possam acessar as funcionalidades da plataforma. Uma interface intuitiva permite que os usuários façam o upload de arquivos XML, incluindo a opção de processar múltiplos documentos de uma só vez através de um arquivo ZIP."
+        paragraph_2: "O processamento dos documentos é realizado em background, utilizando a poderosa ferramenta Sidekiq, garantindo que a aplicação continue a funcionar de forma fluida enquanto as operações mais intensivas ocorrem de forma assíncrona. Após o processamento, a aplicação gera relatórios detalhados que extraem e exibem informações críticas dos documentos fiscais, como o número de série, número da nota fiscal, data e hora de emissão, além de dados completos sobre o emitente e o destinatário. Os produtos listados também são detalhados com informações sobre o nome, NCM, CFOP, unidade, quantidade comercializada e valor unitário, assim como os impostos associados, incluindo ICMS, IPI, PIS e COFINS. A aplicação ainda oferece totalizadores que resumem os valores totais dos produtos e impostos."
+        paragraph_3: "Para facilitar a visualização e análise das informações, os relatórios gerados podem ser filtrados de acordo com critérios específicos, tornando a busca e o cruzamento de dados uma tarefa simples e eficiente. Além disso, os relatórios podem ser exportados em formato Excel, permitindo que os usuários compartilhem e analisem os dados fora da aplicação. Com um foco em qualidade e confiabilidade, a aplicação inclui testes automatizados utilizando RSPEC, garantindo que as funcionalidades principais estejam sempre funcionando conforme esperado."
+    header:
+      process_documents: "Processar Documentos"
+      processed_documents: "Documentos Processados"
+      reports: "Relatórios"
+      logout: "Sair"
+      login: "Login"
+      sign_up: "Cadastrar"
+    documents:
+      index:
+        title: "Documentos Processados"
+        new_document: "Processar Novo Documento"
+        table_headers:
+          file: "Arquivo"
+          upload_date: "Data de Envio"
+          actions: "Ações"
+        delete_confirmation: "Tem certeza que deseja excluir este documento?"
+        delete: "Excluir"
+      form:
+        upload_label: "Upload de Documentos (XML ou ZIP)"
+        submit_button: "Enviar Documento"
+  controllers:
+    reports:
+      alerts:
+        no_documents_selected: "Nenhum documento encontrado para exportação."
+        document_not_found: "Detalhe do documento não encontrado."
+      filenames:
+        single_document: "documento_detalhado"
+        multiple_documents: "relatorios_exportados"
+    documents:
+      alerts:
+        unsupported_files: "Os seguintes arquivos não são suportados: %{invalid_files}. Apenas ZIP e XML são permitidos."
+        no_documents_selected: "Nenhum documento válido foi selecionado."
+        document_upload_error: "Erro ao enviar o documento: %{filename}."
+        all_documents_processed: "Todos os documentos foram enviados e processados com sucesso."
+        document_deleted: "Documento excluído com sucesso."
+        document_delete_error: "Erro ao excluir o documento."
+        document_not_found: "Documento não encontrado."
