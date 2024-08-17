@@ -129,6 +129,8 @@ GEM
       rails (>= 5.2.3.4, <= 7.3)
       railties (> 4.0, <= 7.3)
     diff-lcs (1.5.1)
+    dockerfile-rails (1.6.17)
+      rails (>= 3.0.0)
     erubi (1.13.0)
     factory_bot (6.4.6)
       activesupport (>= 5.0.0)
@@ -362,6 +364,7 @@ DEPENDENCIES
   debug
   devise
   devise-tailwindcssed
+  dockerfile-rails (>= 1.6)
   factory_bot_rails
   importmap-rails
   jbuilder
