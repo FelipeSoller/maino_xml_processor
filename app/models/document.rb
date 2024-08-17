@@ -2,7 +2,5 @@ class Document < ApplicationRecord
   belongs_to :user
   has_many :document_details, dependent: :destroy
   
-  mount_uploader :file, DocumentUploader
-
-  validates :file, presence: true
+  has_many_attached :files
 end

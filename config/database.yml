@@ -10,6 +10,13 @@ development:
   <<: *default
   database: maino_xml_processor_development
 
+production:
+  <<: *default
+  adapter: postgresql
+  encoding: unicode
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  url: <%= ENV.fetch("DATABASE_URL", '') %>
+
 test:
   <<: *default
   database: maino_xml_processor_test

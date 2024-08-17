@@ -3,32 +3,41 @@ require 'zip'
 class ProcessXmlFileJob < ApplicationJob
   queue_as :file_processing
 
-  def perform(document_id)
+  def perform(file_signed_id, document_id)
     document = Document.find(document_id)
-    
-    if document.file.file.extension.downcase == 'zip'
-      process_zip_file(document)
+    file = ActiveStorage::Blob.find_signed(file_signed_id)
+
+    if file.filename.extension.downcase == 'zip'
+      Rails.logger.info "Processando arquivo ZIP: #{file.filename}"
+      process_zip_file(file, document)
     else
-      process_xml_file(document)
+      Rails.logger.info "Processando arquivo XML individual: #{file.filename}"
+      process_xml_file(file, document)
     end
   end
 
   private
 
-  def process_zip_file(document)
-    Zip::File.open(document.file.path) do |zip_file|
+  def process_zip_file(file, document)
+    Rails.logger.info "Iniciando o processamento do ZIP para o documento #{document.id}"
+    temp_file = file.download
+    Zip::File.open_buffer(temp_file) do |zip_file|
       zip_file.each do |entry|
         next unless entry.file? && entry.name.downcase.end_with?('.xml')
-        
+
+        Rails.logger.info "Processando arquivo XML no ZIP: #{entry.name}"
         xml_content = entry.get_input_stream.read
         parsed_xml = Nokogiri::XML(xml_content)
         process_parsed_xml(parsed_xml, document)
       end
     end
+  rescue StandardError => e
+    Rails.logger.error "Erro ao processar o arquivo ZIP: #{e.message}"
   end
 
-  def process_xml_file(document)
-    xml_content = File.read(document.file.path)
+  def process_xml_file(file, document)
+    Rails.logger.info "Processando arquivo XML individual: #{file.filename}"
+    xml_content = file.download
     parsed_xml = Nokogiri::XML(xml_content)
     process_parsed_xml(parsed_xml, document)
   end

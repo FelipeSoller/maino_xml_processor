@@ -18,7 +18,17 @@
           <% @documents.each do |document| %>
             <tr class="border-b">
               <td class="py-3 px-6">
-                <%= link_to document.file.identifier, document.file.url, class: "text-blue-500 hover:text-blue-700" %>
+                <% if document.files.attached? %>
+                  <ul >
+                    <% document.files.each do |file| %>
+                      <li>
+                        <%= link_to file.filename.to_s, rails_blob_path(file, disposition: "attachment"), class: "text-blue-500 hover:text-blue-700" %>
+                      </li>
+                    <% end %>
+                  </ul>
+                <% else %>
+                  Sem arquivos
+                <% end %>
               </td>
               <td class="py-3 px-6">
                 <%= document.created_at.strftime("%d/%m/%Y %H:%M") %>

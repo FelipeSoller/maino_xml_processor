@@ -11,12 +11,11 @@ class DocumentsController < ApplicationController
   end
 
   def create
-    uploaded_files = params[:document][:files].reject(&:blank?)
-    errors = []
+    uploaded_files = document_params[:files].reject(&:blank?)
     invalid_files = []
 
     uploaded_files.each do |uploaded_file|
-      unless ['zip', 'xml'].include?(uploaded_file.original_filename.split('.').last.downcase)
+      unless ['zip', 'xml'].include?(uploaded_file.content_type.split('/').last.downcase)
         invalid_files << uploaded_file.original_filename
       end
     end
@@ -37,22 +36,17 @@ class DocumentsController < ApplicationController
       return
     end
 
-    uploaded_files.each do |uploaded_file|
-      document = current_user.documents.build(file: uploaded_file)
+    @document = current_user.documents.build
 
-      if document.save
-        ProcessXmlFileJob.perform_later(document.id)
-      else
-        errors << t('controllers.documents.alerts.document_upload_error', filename: uploaded_file.original_filename)
+    if @document.save
+      @document.files.attach(uploaded_files)
+      @document.files.each do |file|
+        ProcessXmlFileJob.perform_later(file.signed_id, @document.id)
       end
-    end
-
-    if errors.empty?
-      respond_to do |format|
-        format.turbo_stream { redirect_to documents_path, notice: t('controllers.documents.alerts.all_documents_processed') }
-      end
+      redirect_to documents_path, notice: t('controllers.documents.alerts.all_documents_processed')
     else
-      flash.now[:alert] = errors.join(', ')
+      Rails.logger.error("Erro ao salvar documento: #{@document.errors.full_messages.join(', ')}")
+      flash.now[:alert] = @document.errors.full_messages.join(', ')
       respond_to do |format|
         format.turbo_stream { render turbo_stream: turbo_stream.replace("form_errors", partial: "documents/form_errors") }
       end
