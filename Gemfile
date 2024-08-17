@@ -49,6 +49,8 @@ gem 'kaminari'
 
 gem 'caxlsx'
 
+gem 'aws-sdk-s3', require: false
+
 # Use Kredis to get higher-level data types in Redis [https://github.com/rails/kredis]
 # gem "kredis"
 
